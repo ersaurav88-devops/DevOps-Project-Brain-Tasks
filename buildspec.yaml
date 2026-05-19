@@ -16,10 +16,7 @@ install:
   pre_build:
     commands:
       - echo "Logging in to Amazon ECR..."
-      - ACCOUNT_ID=794528241533
-      - REGION=us-east-1
-      - REPOSITORY_URI=$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/brain-tasks-app
-      - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 060699023193.dkr.ecr.us-east-1.amazonaws.com
       - echo "Connecting to EKS Cluster..."
       - aws eks update-kubeconfig --name brain-cluster --region us-east-1
       - aws sts get-caller-identity
