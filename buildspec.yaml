@@ -1,18 +1,17 @@
-Add:
 version: 0.2
+
 env:
   variables:
     AWS_STS_REGIONAL_ENDPOINTS: regional
 
 phases:
-
-install:
+  install:
     commands:
       - echo "Installing kubectl..."
       - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
       - chmod +x kubectl
-      - mv ./kubectl /usr/local/bin/kubectl
-      
+      - mv kubectl /usr/local/bin/kubectl
+
   pre_build:
     commands:
       - echo "Logging in to Amazon ECR..."
@@ -31,7 +30,7 @@ install:
   post_build:
     commands:
       - echo "Pushing the Docker image to ECR..."
-      - docker push 794528241533.dkr.ecr.us-east-1.amazonaws.com/mahi-tasks-app:latest
+      - docker push 794528241533.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
       - kubectl apply -f deployment.yaml
       - kubectl apply -f service.yaml
       - echo "Deployment Complete!"
