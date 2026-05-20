@@ -6,10 +6,7 @@ env:
 
 phases:
   install:
-  runtime-versions:
-      nodejs: 18
-      docker: 20
-    commands:
+      commands:
       - echo Installing dependencies...
       - npm install -g npm@latest
       - npm install
