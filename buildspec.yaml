@@ -8,14 +8,9 @@ phases:
   install:
       commands:
       - echo Installing dependencies...
-      - npm install -g npm@latest
-      - npm install
       - curl -o kubectl https://amazon-eks.s3.us-east-1.amazonaws.com/1.29.0/2024-04-12/bin/linux/amd64/kubectl
       - chmod +x ./kubectl
       - mv ./kubectl /usr/local/bin/kubectl
-      - curl -o aws-iam-authenticator https://amazon-eks.s3.us-east-1.amazonaws.com/1.29.0/2024-04-12/bin/linux/amd64/aws-iam-authenticator
-      - chmod +x ./aws-iam-authenticator
-      - mv ./aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
 
   pre_build:
     commands:
