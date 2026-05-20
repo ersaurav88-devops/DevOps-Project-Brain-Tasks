@@ -1,0 +1,43 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_STS_REGIONAL_ENDPOINTS: regional
+
+phases:
+  install:
+      commands:
+      - echo Installing dependencies...
+      - curl -o kubectl https://amazon-eks.s3.us-east-1.amazonaws.com/1.29.0/2024-04-12/bin/linux/amd64/kubectl
+      - chmod +x ./kubectl
+      - mv ./kubectl /usr/local/bin/kubectl
+
+  pre_build:
+    commands:
+      - echo "Checking AWS identity"
+      - aws sts get-caller-identity
+      - echo "Checking Docker"
+      - docker --version
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 794528241533.dkr.ecr.us-east-1.amazonaws.com
+      - echo "Connecting to EKS Cluster..."
+      - aws eks update-kubeconfig --name brain-cluster --region us-east-1
+      - aws sts get-caller-identity
+      - kubectl auth can-i get nodes
+      - kubectl get nodes
+ 
+   build:
+    commands:
+      - echo "Building the Docker image..."
+      - docker build -t brain-tasks-app .
+      - docker tag brain-tasks-app:latest 794528241533.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
+
+  post_build:
+    commands:
+      - echo "Pushing the Docker image to ECR..."
+      - kubectl config view
+      - kubectl get ns
+      - docker push 794528241533.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
+      - kubectl apply -f deployment.yaml
+      - kubectl apply -f service.yaml
+      - echo "Deployment Complete!"
