@@ -34,4 +34,5 @@ phases:
       - docker push 794528241533.dkr.ecr.us-east-1.amazonaws.com/brain-tasks-app:latest
       - echo "Deploying to EKS..."
       - kubectl apply -f deployment.yaml
+      - kubectl apply -f service.yaml
       - echo "Deployment Complete!"
